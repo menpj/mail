@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
                       console.log("message not right" + stat);
                     }
                     else {
-                      
+                      load_mailbox('sent');
                     }
               });
 
