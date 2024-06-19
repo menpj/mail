@@ -1,0 +1,4 @@
+if(stat!='{"message": "Email sent successfully."}')
+                {
+                  console.log("big error");
+                }
