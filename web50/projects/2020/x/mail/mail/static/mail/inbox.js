@@ -101,4 +101,39 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  if(mailbox==="inbox" || mailbox==="sent" || mailbox==="archive")
+    {
+              fetch('/emails/'+mailbox)
+        .then(response => response.json())
+        .then(emails => {
+            // Print emails
+            //console.log(emails);
+
+            // ... do something else with emails ...
+            emails.forEach(email => {
+              console.log(email);
+
+              const mailitem = document.createElement('div');
+              mailitem.className='emailitem';
+              console.log(mailbox);
+              let content = "test";
+               if(mailbox!="sent") {
+                if(email['read'])
+                  {
+                    mailitem.style.background = 'grey';
+                  }
+                content=email['sender'] + "         " + email['subject']+ "         " + email['timestamp']; }
+              else {
+                
+                content= email['recipients'] + "         " + email['subject']+ "         " + email['timestamp'];
+              } 
+              mailitem.innerHTML = content;
+              mailitem.addEventListener('click', function() {
+              console.log('This element has been clicked!')
+              });
+              document.querySelector('#emails-view').append(mailitem);
+
+            })
+        });
+    }
 }
