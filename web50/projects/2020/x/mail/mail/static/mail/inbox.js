@@ -166,7 +166,7 @@ function loadmail(id)
               })
             })
 
-            document.querySelector('#emails-view').innerHTML="";
+            document.querySelector('#see-email').innerHTML="";
             const sender = document.createElement('div');
             sender.innerHTML = "Sender: " + email['sender'];
             
@@ -187,6 +187,11 @@ function loadmail(id)
             timestamp.innerHTML = "Timestamp: " + email['timestamp'];
             
             document.querySelector('#see-email').append(timestamp);
+
+            let body = document.createElement('div');
+            body.innerHTML = "Body: " + email['body'];
+            
+            document.querySelector('#see-email').append(body); 
           }
 
         // ... do something else with email ...
