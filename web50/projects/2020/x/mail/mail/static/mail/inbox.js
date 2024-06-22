@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function compose_email() {
 
   // Show compose view and hide other views
+  document.querySelector('#see-email').style.display = 'none';
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -96,6 +97,7 @@ function compose_email() {
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
+  document.querySelector('#see-email').style.display = 'none';
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
 
@@ -129,11 +131,64 @@ function load_mailbox(mailbox) {
               } 
               mailitem.innerHTML = content;
               mailitem.addEventListener('click', function() {
-              console.log('This element has been clicked!')
+              console.log('This element has been clicked!:')
+              console.log(email['id']);
+              loadmail(email['id']);
               });
               document.querySelector('#emails-view').append(mailitem);
 
             })
         });
     }
+}
+
+
+function loadmail(id)
+{
+  document.querySelector('#see-email').style.display = 'block';
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+
+      fetch('/emails/'+id)
+    .then(response => response.json())
+    .then(email => {
+        // Print email
+        console.log(email);
+        const mail= JSON.stringify(email);
+        if(mail!='{"error": "Email not found."}')
+          {
+            
+            console.log("email received");
+            fetch('/emails/'+id, {
+              method: 'PUT',
+              body: JSON.stringify({
+                  read: true
+              })
+            })
+
+            document.querySelector('#emails-view').innerHTML="";
+            const sender = document.createElement('div');
+            sender.innerHTML = "Sender: " + email['sender'];
+            
+            document.querySelector('#see-email').append(sender);
+
+            let recipients = document.createElement('div');
+            recipients.innerHTML = "Recipients: " + email['recipients'];
+            
+            document.querySelector('#see-email').append(recipients); 
+
+
+            let subject = document.createElement('div');
+            subject.innerHTML = "Subject: " + email['subject'];
+            
+            document.querySelector('#see-email').append(subject); 
+
+            let timestamp = document.createElement('div');
+            timestamp.innerHTML = "Timestamp: " + email['timestamp'];
+            
+            document.querySelector('#see-email').append(timestamp);
+          }
+
+        // ... do something else with email ...
+    });
 }
