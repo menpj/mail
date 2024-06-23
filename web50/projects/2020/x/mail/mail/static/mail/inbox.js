@@ -190,10 +190,55 @@ function loadmail(id)
 
             let body = document.createElement('div');
             body.innerHTML = "Body: " + email['body'];
-            
+            body.className="body";
             document.querySelector('#see-email').append(body); 
+
+            let archiveStat=email['archived'];
+            let archiveStatus;
+            if(archiveStat)
+              {
+                archiveStatus="Unarchive";
+              }
+              else 
+              {
+                archiveStatus="Archive";
+              }
+
+            const archive = document.createElement('div');
+            //archive.className = 'archive-button';
+            archive.innerHTML = `<button value=${archiveStatus} class="archive-button">${archiveStatus}</button>`;
+            document.querySelector('#see-email').append(archive); 
+            document.addEventListener('click', event => {
+
+              // Find what was clicked on
+              const element = event.target;
+        
+              
+              if (element.className === 'archive-button') {
+                  console.log("Archive button clicked.");
+                  
+                  if(archiveStat)
+                    {
+                      archiveStat=false;
+                    }
+                    else{
+                      archiveStat=true;
+                    }
+                    fetch('/emails/'+id, {
+                      method: 'PUT',
+                      body: JSON.stringify({
+                          archived: archiveStat
+                      })
+                    });
+                    
+              }
+                
+            });
+
           }
 
         // ... do something else with email ...
     });
+
+    
 }
