@@ -254,6 +254,7 @@ function loadmail(id)
                             document.querySelector('#archive-button').value=archiveStatus;
                             document.querySelector('#archive-button').innerHTML=archiveStatus;
                       });
+                      load_mailbox('inbox');
 
                     }, delayInMilliseconds);
                     
