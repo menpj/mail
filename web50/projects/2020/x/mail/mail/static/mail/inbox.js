@@ -206,7 +206,7 @@ function loadmail(id)
 
             const archive = document.createElement('div');
             //archive.className = 'archive-button';
-            archive.innerHTML = `<button value=${archiveStatus} class="archive-button">${archiveStatus}</button>`;
+            archive.innerHTML = `<button value=${archiveStatus} id="archive-button" class="archive-button">${archiveStatus}</button>`;
             document.querySelector('#see-email').append(archive); 
             document.addEventListener('click', event => {
 
@@ -230,7 +230,53 @@ function loadmail(id)
                           archived: archiveStat
                       })
                     });
+
+                    var delayInMilliseconds = 700; 
+
+                    setTimeout(function() {
+                      
+                      fetch('/emails/'+id)
+                      .then(response => response.json())
+                      .then(email => {
+                          // Print email
+                          console.log("email after changing archobve status");
+                          console.log(email);
+                          let archiveStat=email['archived'];
+                          let archiveStatus;
+                          if(archiveStat)
+                            {
+                              archiveStatus="Unarchive";
+                            }
+                            else 
+                            {
+                              archiveStatus="Archive";
+                            }
+                            document.querySelector('#archive-button').value=archiveStatus;
+                            document.querySelector('#archive-button').innerHTML=archiveStatus;
+                      });
+
+                    }, delayInMilliseconds);
                     
+                    /*fetch('/emails/'+id)
+                      .then(response => response.json())
+                      .then(email => {
+                          // Print email
+                          console.log("email after changing archobve status");
+                          console.log(email);
+                          let archiveStat=email['archived'];
+                          let archiveStatus;
+                          if(archiveStat)
+                            {
+                              archiveStatus="Unarchive";
+                            }
+                            else 
+                            {
+                              archiveStatus="Archive";
+                            }
+                            document.querySelector('#archive-button').value=archiveStatus;
+                            document.querySelector('#archive-button').innerHTML=archiveStatus;
+                      }); */
+
               }
                 
             });
