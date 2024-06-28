@@ -25,14 +25,29 @@ document.addEventListener('DOMContentLoaded', function() {
         var formId = this.id;
         
 
-        if(formId==='compose-form')
+        if(formId==='compose-form' || formId==='compose-reply-form')
           {
             //console.log("trying to compose");
             // You can now use formId to identify which form was submitted
             console.log('Form with ID ' + formId + ' was submitted');
-            const recipients = document.querySelector('#compose-recipients').value;
+            let recipients;
+            let subject;
+            let body;
+            /* const recipients = document.querySelector('#compose-recipients').value;
             const subject = document.querySelector('#compose-subject').value;
-            const body = document.querySelector('#compose-body').value;
+            const body = document.querySelector('#compose-body').value; */
+            if(formId==='compose-form')
+              {
+                recipients = document.querySelector('#compose-recipients').value;
+                subject = document.querySelector('#compose-subject').value;
+                body = document.querySelector('#compose-body').value; 
+              }
+            else if(formId==='compose-reply-form')
+              {
+                recipients = document.querySelector('#compose-reply-recipients').value;
+                subject = document.querySelector('#compose-reply-subject').value;
+                body = document.querySelector('#compose-reply-body').value;  
+              }
 
             console.log(recipients)
             console.log(subject)
@@ -95,8 +110,14 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
-function compose_reply_email(id) {
+function compose_reply_email(email) {
 
+  
+    
+
+
+  console.log("request for composing reply recieved");
+  console.log(email);
   // Show compose view and hide other views
   document.querySelector('#see-email').style.display = 'none';
   document.querySelector('#emails-view').style.display = 'none';
@@ -104,9 +125,16 @@ function compose_reply_email(id) {
   document.querySelector('#compose-reply-view').style.display = 'block';
 
   // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
+  document.querySelector('#compose-reply-recipients').value = email['sender'];
+  //let subject=JSON.stringify(email['subject']);
+  let subject=email['subject'];
+  if(!subject.startsWith("Re: "))
+    {
+      subject="Re: "+subject;
+    }
+  document.querySelector('#compose-reply-subject').value = subject;
+  document.querySelector('#compose-reply-body').value = '"On ' + email['timestamp'] +' ' +email['sender']+ ' wrote: ' +email['body']+ '"\n\n';
+  document.getElementById('compose-reply-body').focus();
 }
 
 function load_mailbox(mailbox) {
@@ -286,7 +314,7 @@ function loadmail(id)
               else if(element.className==='reply-button')
                 {
                   console.log("Reply button is clicked");
-                  compose_reply_email(id);
+                  compose_reply_email(email);
                 }
             });
 

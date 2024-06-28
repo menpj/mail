@@ -33,18 +33,18 @@
     </div>
 
     <div id="compose-reply-view">
-        <h3>New Email</h3>
-        <form id="compose-form">
+        <h3>Reply Email</h3>
+        <form id="compose-reply-form">
             <div class="form-group">
                 From: <input placeholder="frominput" name="frominput" disabled class="form-control" value="{{ request.user.email }}">
             </div>
             <div class="form-group">
-                To: <input placeholder="toinput" name="toinput" id="compose-recipients" class="form-control">
+                To: <input placeholder="toinput" name="toinput" id="compose-reply-recipients" class="form-control">
             </div>
             <div class="form-group">
-                <input name="subjectinput" class="form-control" id="compose-subject" placeholder="Subject">
+                <input name="subjectinput" class="form-control" id="compose-reply-subject" placeholder="Subject">
             </div>
-            <textarea name="bodyinput" class="form-control" id="compose-body" placeholder="Body"></textarea>
+            <textarea name="bodyinput" class="form-control" id="compose-reply-body" placeholder="Body"></textarea>
             <input type="submit" class="btn btn-primary"/>
         </form>
     </div>
