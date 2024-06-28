@@ -87,6 +87,21 @@ function compose_email() {
   document.querySelector('#see-email').style.display = 'none';
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#compose-reply-view').style.display = 'none';
+
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = '';
+  document.querySelector('#compose-subject').value = '';
+  document.querySelector('#compose-body').value = '';
+}
+
+function compose_reply_email(id) {
+
+  // Show compose view and hide other views
+  document.querySelector('#see-email').style.display = 'none';
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#compose-reply-view').style.display = 'block';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -100,6 +115,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#see-email').style.display = 'none';
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#compose-reply-view').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -148,6 +164,7 @@ function loadmail(id)
   document.querySelector('#see-email').style.display = 'block';
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#compose-reply-view').style.display = 'none';
 
       fetch('/emails/'+id)
     .then(response => response.json())
@@ -208,6 +225,11 @@ function loadmail(id)
             //archive.className = 'archive-button';
             archive.innerHTML = `<button value=${archiveStatus} id="archive-button" class="archive-button">${archiveStatus}</button>`;
             document.querySelector('#see-email').append(archive); 
+
+            const reply = document.createElement('div');
+            reply.innerHTML = `<br><button value=${id} id="reply-button" class="reply-button">Reply</button>`;
+            document.querySelector('#see-email').append(reply); 
+
             document.addEventListener('click', event => {
 
               // Find what was clicked on
@@ -258,28 +280,14 @@ function loadmail(id)
 
                     }, delayInMilliseconds);
                     
-                    /*fetch('/emails/'+id)
-                      .then(response => response.json())
-                      .then(email => {
-                          // Print email
-                          console.log("email after changing archobve status");
-                          console.log(email);
-                          let archiveStat=email['archived'];
-                          let archiveStatus;
-                          if(archiveStat)
-                            {
-                              archiveStatus="Unarchive";
-                            }
-                            else 
-                            {
-                              archiveStatus="Archive";
-                            }
-                            document.querySelector('#archive-button').value=archiveStatus;
-                            document.querySelector('#archive-button').innerHTML=archiveStatus;
-                      }); */
+                    
 
               }
-                
+              else if(element.className==='reply-button')
+                {
+                  console.log("Reply button is clicked");
+                  compose_reply_email(id);
+                }
             });
 
           }
